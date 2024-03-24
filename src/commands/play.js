@@ -21,7 +21,7 @@ module.exports = {
             guild: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
             textChannel: interaction.channel.id,
-            region: 'thailand',
+            region: config.region,
             selfDeafen: config.selfDeafen
         });
 
@@ -71,9 +71,11 @@ module.exports = {
             guild: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
             textChannel: interaction.channel.id,
-            region: 'thailand',
+            region: config.region,
             selfDeafen: config.selfDeafen
         });
+
+        console.log(player)
 
         if (!player.voiceChannel) {
             await player.destroy()
@@ -81,7 +83,7 @@ module.exports = {
                 guild: interaction.guild.id,
                 voiceChannel: interaction.member.voice.channel.id,
                 textChannel: interaction.channel.id,
-                region: 'thailand',
+                region: config.region,
                 selfDeafen: config.selfDeafen
             });
         }

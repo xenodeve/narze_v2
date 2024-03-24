@@ -18,5 +18,6 @@
     "embed_color":"#05FBBF",
     "embed_fail":"#FF0000",
     "volume_default": 0.3,
-    "selfDeafen": true
+    "selfDeafen": true,
+    "region": "TH"
 }
