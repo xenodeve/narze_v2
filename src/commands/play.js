@@ -151,8 +151,6 @@ module.exports = {
         console.log(res)
 
         const userAvatar = interaction.user.displayAvatarURL();
-        const userMention = interaction.user.toString();
-
 
         if (!player.playing && !player.paused && !player.queue.size && !res.playlist && res.tracks[0].isStream === false) {
             await player.queue.add(res.tracks[0]);
