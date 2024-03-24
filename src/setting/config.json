@@ -1,0 +1,20 @@
+{
+    "token": "MTIyMTIxNjYyOTA0NDgwOTc0OQ.GbxmWq.-if2UKi5AldrQ5obdh4GwpvQ_CpGzKUssgugh4",
+    "clientId": "1221216629044809749",
+    "guildId": "505691523241869313",
+    "nodes": [
+		{
+			"host": "127.0.0.1",
+			"port": 2333,
+			"password": "xeno",
+			"regions": ["thailand"],
+			"retryAmount": 20,
+			"retryDelay": 6000,
+			"secure": false,
+			"version": "v4"
+		}
+	],
+    "search_plat": "ytmsearch",
+    "embed_color":"#05FBBF",
+    "embed_fail":"#FF0000"
+}
