@@ -13,11 +13,15 @@ module.exports = {
 		let channels = client.channels.cache.size;
 
 		const activities = [
-			`🛠️ Test Bot | xeno.2004`,
+			`🛠️ Developing | xeno.2004`,
 			// `🛠️ (Final Phase) | xeno.2004`,
 			// `/help | ${guilds} servers`,
 			//`/play <input> | ${members} users`,
-			// `🎧 /play <input>`,
+			`🎧 /play <input>`,
+			`✅ Youtube | xeno.2004`,
+			`✅ Youtube Music | xeno.2004`,
+			`✅ Spotify | xeno.2004`,
+			`✅ SoundCloud | xeno.2004`,
 			`🤝 ${members} users used`,
 			//`/filter <menu> | ${channels} channels`,
 			// `/filter <menu>`,

@@ -17,11 +17,7 @@ const client = new Client({
 
 client.manager = new Manager({
 	nodes: config.nodes,
-	source: [
-		"spotify",
-		"apple music"
-	],
-	// forceSearchLinkQueries: true,
+	forceSearchLinkQueries: true,
 	defaultSearchPlatform: config.search_plat,
 	position_update_interval: 100,
 	send: (id, payload) => {

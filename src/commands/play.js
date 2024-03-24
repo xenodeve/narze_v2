@@ -27,37 +27,25 @@ module.exports = {
         if (!query) {
             choice.push({ name: 'กรุณาระบุเพลง', value: 'no_song' });
         } else if (query.startsWith('https://')) {
-            if (query.includes('youtu.be') || query.includes('youtube')) {
-                if (query.includes('list=')) {
-                    let result = await player.search(query, interaction.author)
-
-                    if (result.loadType === 'error') {
-                        title = `(ข้อผิดพลาด) กรุณาใส่ URL ที่ถูกต้อง`;
-                        choice.push({ name: title, value: 'error' });
-                    } else {
-                        const title = `(${result.tracks.length} เพลง) ${result.playlist.name}`
-                        choice.push({ name: title, value: query });
-                    }
-
-                } else {
-                    let result = await player.search(query, interaction.author)
-
-                    if (result.loadType === 'error') {
-                        title = `(ข้อผิดพลาด) กรุณาใส่ URL ที่ถูกต้อง`;
-                        choice.push({ name: title, value: 'error' });
-                    } else {
-                        const title = `(${result.tracks[0].channel.name} เพลง) ${result.tracks[0].title}`
-                        choice.push({ name: title, value: query });
-                    }
-                }
-
-            } else if (query.includes('spotify') || query.includes('deezer') || query.includes('soundcloud')) {
-                choice.push({ name: query, value: query });
+            if(query.includes('deezer') || query.includes('music.apple')){
+                choice.push({ name: 'ไม่รองรับ Platform นี้', value: 'deezer, music.apple' });
             } else {
-                choice.push({ name: 'ไม่รองรับ Platform นี้', value: 'ไม่รองรับ Platform นี้' });
+                let result = await player.search(query, interaction.author)
+
+                if (result.loadType === 'error' || result.loadType === 'empty') {
+                    title = `(ข้อผิดพลาด) กรุณาใส่ URL ที่ถูกต้อง`;
+                    choice.push({ name: title, value: 'error' });
+                } else if (result.playlist) {
+                    console.log(result)
+                    const title = `(${result.tracks.length} เพลง) ${result.playlist.name}`
+                    choice.push({ name: title, value: query });
+                } else {
+                    const title = `(${result.tracks[0].author}) ${result.tracks[0].title}`
+                    choice.push({ name: title, value: query });
+                }
             }
         } else {
-            console.log('10')
+            // console.log('10')
             await player.search(query, interaction.author).catch(error => {
                 {
                     // จัดการกับ error ที่เกิดขึ้น
@@ -84,7 +72,7 @@ module.exports = {
 
         if (!player.voiceChannel) {
             await player.destroy()
-            let player = await interaction.client.manager.create({
+            player = await interaction.client.manager.create({
                 guild: interaction.guild.id,
                 voiceChannel: interaction.member.voice.channel.id,
                 textChannel: interaction.channel.id,
@@ -119,10 +107,16 @@ module.exports = {
                 .setDescription(`> ❌คุณต้องอยู่ในห้องเดียวกับบอท`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
+        } else if (query.includes('deezer') || query.includes('music.apple')) {
+            const embed = new EmbedBuilder()
+                .setColor(config.embed_fail)
+                .setDescription(`> \`❌\`ไม่รองรับ Platform นี้`);
+
+            return interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
         const res = await player.search(query, interaction.author)
-        
+
         if (!res.tracks[0]) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
@@ -148,12 +142,14 @@ module.exports = {
             }
         }
 
-        console.log(res)
+        // console.log(res)
 
         const userAvatar = interaction.user.displayAvatarURL();
 
         if (!player.playing && !player.paused && !player.queue.size && !res.playlist && res.tracks[0].isStream === false) {
             await player.queue.add(res.tracks[0]);
+
+            player.set('firstsong', true)
 
             F_Join_Play();
 
@@ -180,7 +176,7 @@ module.exports = {
 
         } else if (res.playlist) {
             // ถ้าเป็น playlist
-            console.log(res)
+            // console.log(res)
             await player.queue.add(res.tracks)
             F_Join_Play();
 

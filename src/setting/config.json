@@ -14,7 +14,7 @@
 			"version": "v4"
 		}
 	],
-    "search_plat": "ytmsearch",
+    "search_plat": "sp",
     "embed_color":"#05FBBF",
     "embed_fail":"#FF0000"
 }
