@@ -3,8 +3,9 @@ const chalk = require('chalk');
 module.exports = {
 	name: 'playerMove',
 	execute(player, oldChannelId, newChannelId) {
-		player_play = global.player;
-		// console.log(`[DEBUG] Player Created from (${player.guild})`);
-		console.log(`[${chalk.bold.greenBright('LAVALINK')}] ${chalk.greenBright('player move from')} ${oldChannelId.name} ${chalk.greenBright('to')} ${chalk.greenBright('New Channel:')} ${newChannelId.name} ${chalk.greenBright('Server:')} ${player.guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
+        let interaction = global.interaction;
+        const old_Channel = interaction.guild.channels.cache.get(oldChannelId)
+        const new_Channel = interaction.guild.channels.cache.get(newChannelId)
+		console.log(`[${chalk.bold.greenBright('LAVALINK')}] ${chalk.greenBright('player moved from')} ${old_Channel.name} ${chalk.greenBright('to')} ${chalk.greenBright('New Channel:')} ${new_Channel.name} ${chalk.greenBright('Server:')} ${new_Channel.guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
 	},
 };

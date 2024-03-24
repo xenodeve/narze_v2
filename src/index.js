@@ -20,6 +20,7 @@ client.manager = new Manager({
 	forceSearchLinkQueries: true,
 	defaultSearchPlatform: config.search_plat,
 	position_update_interval: 100,
+    volumeDecrementer: config.volume_default,
 	send: (id, payload) => {
 		const guild = client.guilds.cache.get(id);
 		if (guild) guild.shard.send(payload);

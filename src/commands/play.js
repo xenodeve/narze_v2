@@ -15,11 +15,14 @@ module.exports = {
         ),
     async autocomplete(interaction) {
 
+        global.autoInteraction = interaction;
         const query = interaction.options.getString('query');
         let player = await interaction.client.manager.get(interaction.guild.id) || await interaction.client.manager.create({
             guild: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
             textChannel: interaction.channel.id,
+            region: 'thailand',
+            selfDeafen: config.selfDeafen
         });
 
         let choice = [];
@@ -27,7 +30,7 @@ module.exports = {
         if (!query) {
             choice.push({ name: 'กรุณาระบุเพลง', value: 'no_song' });
         } else if (query.startsWith('https://')) {
-            if(query.includes('deezer') || query.includes('music.apple')){
+            if (query.includes('deezer') || query.includes('music.apple')) {
                 choice.push({ name: 'ไม่รองรับ Platform นี้', value: 'deezer, music.apple' });
             } else {
                 let result = await player.search(query, interaction.author)
@@ -59,7 +62,7 @@ module.exports = {
                 }
             }).catch(() => { });
         }
-        interaction.respond(choice).catch(() => { });
+        await interaction.respond(choice).catch(() => { });
     },
     async execute(interaction) {
         global.interaction = interaction;
@@ -68,6 +71,8 @@ module.exports = {
             guild: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
             textChannel: interaction.channel.id,
+            region: 'thailand',
+            selfDeafen: config.selfDeafen
         });
 
         if (!player.voiceChannel) {
@@ -76,6 +81,8 @@ module.exports = {
                 guild: interaction.guild.id,
                 voiceChannel: interaction.member.voice.channel.id,
                 textChannel: interaction.channel.id,
+                region: 'thailand',
+                selfDeafen: config.selfDeafen
             });
         }
 
@@ -98,13 +105,13 @@ module.exports = {
         } else if (!interaction.member.voice.channel) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
-                .setDescription(`> ❌กรุณาเข้าห้องเสียงด้วย`);
+                .setDescription(`> \`❌\` กรุณาเข้าห้องเสียงด้วย`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (interaction.member.voice.channel.id !== player.voiceChannel) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
-                .setDescription(`> ❌คุณต้องอยู่ในห้องเดียวกับบอท`);
+                .setDescription(`> \`❌\` คุณต้องอยู่ในห้องเดียวกับบอท`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (query.includes('deezer') || query.includes('music.apple')) {
@@ -120,14 +127,14 @@ module.exports = {
         if (!res.tracks[0]) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
-                .setDescription(`> ❌ไม่สามารถเข้าถึงเพลงได้`);
+                .setDescription(`> \`❌\` ไม่สามารถเข้าถึงเพลงได้`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (!permissions.has(PermissionsBitField.Flags.Connect) || !permissions.has(PermissionsBitField.Flags.Speak)) {
             player.destroy();
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
-                .setDescription(`> ❌บอทไม่มีอำนาจเปิดเพลงในห้อง ${channel.toString()}`);
+                .setDescription(`> \`❌\` บอทไม่มีอำนาจเปิดเพลงในห้อง ${channel.toString()}`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         }
@@ -146,6 +153,7 @@ module.exports = {
 
         const userAvatar = interaction.user.displayAvatarURL();
 
+        player.set('firstsong', false)
         if (!player.playing && !player.paused && !player.queue.size && !res.playlist && res.tracks[0].isStream === false) {
             await player.queue.add(res.tracks[0]);
 
@@ -157,7 +165,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_color)
                 .setAuthor({ name: 'Go to Page', iconURL: userAvatar, url: res.tracks[0].uri })
-                .setDescription(`▶️┃**${res.tracks[0].title}** \` ${convertTime(res.tracks[0].duration)} \``)
+                .setDescription(`\`▶️\`┃**${res.tracks[0].title}** \` ${convertTime(res.tracks[0].duration)} \``)
                 .setThumbnail(res.tracks[0].thumbnail)
 
             return interaction.editReply({ embeds: [embed] });
@@ -170,7 +178,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_color)
                 .setAuthor({ name: 'Go to Page', iconURL: userAvatar, url: res.tracks[0].uri })
-                .setDescription(`📝┃**${res.tracks[0].title}** \` ${convertTime(res.tracks[0].duration)} \` \n ลำดับ: \` ${player.queue.size} \``)
+                .setDescription(`\`📝\`┃**${res.tracks[0].title}** \` ${convertTime(res.tracks[0].duration)} \` \n ลำดับ: \` ${player.queue.size} \``)
                 .setThumbnail(res.tracks[0].thumbnail)
             return interaction.editReply({ embeds: [embed] });
 
@@ -192,35 +200,29 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setColor(config.embed_color)
                     .setAuthor({ name: 'Go to Playlist', iconURL: userAvatar, url: query })
-                    .setDescription(`> 🎵 **Playlist:** ${res.playlist.name}\n> ⏱ **เวลา:** \` ${convertTime(res.playlist.duration)} \` \n> 📊 **มี:** \` ${res.tracks.length} \` เพลง \n> **ห้อง:** ${channel.toString()}`)
+                    .setDescription(`> \`🎵\` **Playlist:** ${res.playlist.name}\n> \`⌛\` **เวลา:** \` ${convertTime(res.playlist.duration)} \` \n> \`📊\` **มี:** \` ${res.tracks.length} \` เพลง \n> **ห้อง:** ${channel.toString()}`)
                     .setThumbnail(thumbnail);
 
                 return interaction.editReply({ embeds: [embed], ephemeral: false });
             } else {
                 const embed = new EmbedBuilder()
                     .setColor(config.embed_fail)
-                    .setDescription(`> ❌ไม่สามารถดึงข้อมูลเพลย์ลิสต์ได้.`);
+                    .setDescription(`> \`❌\` ไม่สามารถดึงข้อมูลเพลย์ลิสต์ได้.`);
 
                 return interaction.reply({ embeds: [embed], ephemeral: true });
             }
         } else if (res.tracks[0].isStream === true) {
 
-            await player.queue.add(res.tracks[0]).catch(error => {
-                const embed = new EmbedBuilder()
-                    .setColor(config.embed_fail)
-                    .setDescription(`> ❌ไม่สามารถดึงข้อมูล Live นี้ได้.`);
-
-                return interaction.editReply({ embeds: [embed], ephemeral: true });
-            })
+            await player.queue.add(res.tracks[0])
 
             F_Join_Play();
 
             // สร้าง Embed และแสดงผล
             const embed = new EmbedBuilder()
                 .setColor(config.embed_color)
-                .setAuthor({ name: 'Go to Live', iconURL: userAvatar, url: urls })
-                .setDescription(`🔴┃**${res.tracks[0].title}**`)
-                .setThumbnail(`https://img.youtube.com/vi/${video_id}/maxresdefault.jpg`)
+                .setAuthor({ name: 'Go to Live', iconURL: userAvatar, url: query })
+                .setDescription(`\`🔴\`┃**${res.tracks[0].title}**`)
+                .setThumbnail(res.tracks[0].thumbnail)
             return interaction.editReply({ embeds: [embed] });
         }
     }

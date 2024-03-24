@@ -3,6 +3,8 @@ const chalk = require('chalk');
 module.exports = {
 	name: 'playerCreate',
 	execute(player) {
-		console.log(`[${chalk.bold.greenBright('DEBUG')}] ${chalk.greenBright('player create from')} ${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
+		let interaction = global.autoInteraction;
+		let guild = interaction.client.guilds.cache.get(player.guild);
+		console.log(`[${chalk.bold.greenBright('DEBUG')}] ${chalk.greenBright('player create from')} ${chalk.greenBright('Server:')} ${guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
 	},
 };
