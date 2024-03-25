@@ -14,7 +14,8 @@ module.exports = {
 
 		const activities = [
 			`🛠️ Developing | xeno.2004`,
-			// `🛠️ (Final Phase) | xeno.2004`,
+			`🛠️ (Final Phase) | xeno.2004`,
+			`🛠️ Update v2 | xeno.2004`,
 			// `/help | ${guilds} servers`,
 			//`/play <input> | ${members} users`,
 			`🎧 /play <input>`,

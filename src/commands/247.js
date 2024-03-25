@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../setting/config.json');
-const { red } = require('color-name');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,18 +11,18 @@ module.exports = {
         if (!player) {
             const embed = new EmbedBuilder()
                 .setDescription(`> ❌ไม่มีบอทในห้อง`)
-                .setColor(red);
+                .setColor(config.embed_fail);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (!interaction.member.voice.channel) {
             const embed = new EmbedBuilder()
-                .setColor(red)
+                .setColor(config.embed_fail)
                 .setDescription(`> ❌กรุณาเข้าห้องเสียงด้วย`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (interaction.member.voice.channel.id !== player.voiceChannel) {
             const embed = new EmbedBuilder()
-                .setColor(red)
+                .setColor(config.embed_fail)
                 .setDescription(`> ❌คุณต้องอยู่ในห้องเดียวกับบอท`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
@@ -35,7 +34,6 @@ module.exports = {
                 .setDescription(`> \`🌙\` | *โหมด 24/7 :* \` ปิดการใช้งาน \``)
                 .setColor(config.embed_color);
 
-            // return interaction.editReply({ embeds: [embed] });
             return interaction.reply({ embeds: [embed] });
         } else {
             player.twentyFourSeven = true;
@@ -44,7 +42,6 @@ module.exports = {
                 .setDescription(`> \`🌕\` | *โหมด 24/7 :* \` เปิดการใช้งาน \``)
                 .setColor(config.embed_color);
 
-            // return interaction.editReply({ embeds: [embed] });
             return interaction.reply({ embeds: [embed] });
         }
     }

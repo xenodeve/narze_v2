@@ -75,8 +75,6 @@ module.exports = {
             selfDeafen: config.selfDeafen
         });
 
-        console.log(player)
-
         if (!player.voiceChannel) {
             await player.destroy()
             player = await interaction.client.manager.create({

@@ -12,6 +12,8 @@ module.exports = {
         const { channel } = interaction.member.voice;
         const textChannel = interaction.guild.channels.cache.get(interaction.channelId)
 
+        console.log(player)
+
         console.log(`[${chalk.bold.greenBright('LAVALINK')}] ${chalk.greenBright('Play')} ${track.title} ${chalk.greenBright('in Channel:')} ${channel.name} ${chalk.greenBright('Server:')} ${interaction.guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
 
         const userAvatar = interaction.user.displayAvatarURL();

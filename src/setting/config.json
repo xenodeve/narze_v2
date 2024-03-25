@@ -1,6 +1,6 @@
 {
-    "token": "MTIyMTIxNjYyOTA0NDgwOTc0OQ.GbxmWq.-if2UKi5AldrQ5obdh4GwpvQ_CpGzKUssgugh4",
-    "clientId": "1221216629044809749",
+    "token": "MTExNTg2MDg2NTczNzAzNTg1OA.GcQOke.EGR6VqijAKmgrHSoDVJVTSWzb4az23kA2eGjN0",
+	"clientId": "1115860865737035858",
     "guildId": "505691523241869313",
     "nodes": [
 		{
@@ -15,7 +15,7 @@
 		}
 	],
     "search_plat": "sp",
-    "embed_color":"#05FBBF",
+    "embed_color":"#e4854a",
     "embed_fail":"#FF0000",
     "volume_default": 0.3,
     "selfDeafen": true,
