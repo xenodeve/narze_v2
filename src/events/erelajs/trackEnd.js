@@ -1,10 +1,9 @@
-const chalk = require('chalk');
-
 module.exports = {
-	name: 'queueEnd',
+	name: 'trackEnd',
 	execute(player, track, payload) {
 
-		if(player.twentyFourSeven === true) return;
-		player.destroy();
+		if (player.autoplay) {
+            player.Autoplay(track);
+        }
 	},
 };

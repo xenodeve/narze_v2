@@ -2,7 +2,7 @@ const chalk = require('chalk');
 
 module.exports = {
 	name: 'interactionCreate',
-	async execute(interaction) {
+	async execute(interaction, client) {
 
 		const command = interaction.client.commands.get(interaction.commandName);
 
@@ -11,7 +11,7 @@ module.exports = {
 			if (!command) return;
 
 			try {
-				await command.execute(interaction);
+				await command.execute(interaction, client);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply({ content: 'Error trying to executing this command.', ephemeral: true });

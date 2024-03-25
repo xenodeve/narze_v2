@@ -26,8 +26,9 @@ client.manager = new Manager({
 		if (guild) guild.shard.send(payload);
 	}
 });
+
 //จำเป็นต้องมี ส่งค่า Event voice ต่าง ๆ ให้ erela จัดการ
-client.on("raw", (r) => client.manager.updateVoiceState(r));
+client.on('raw', (r) => client.manager.updateVoiceState(r));
 
 
 //ทำการโหลดไฟล์ Event erela เข้าบอท

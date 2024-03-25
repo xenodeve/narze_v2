@@ -59,7 +59,7 @@ lavalink:
       snapshot: false # set to true if you want to use snapshot builds (see below)
 
     - dependency: "com.dunctebot:skybot-lavalink-plugin:1.6.3"
-      # repository : "https://maven.lavalink.dev/releases" # (optional on lavalink 4)
+      repository : "https://maven.lavalink.dev/releases" # (optional on lavalink 4)
       snapshot: false # (optional, tells lavalink to use the default snaptshot repository instead)
 
   server:

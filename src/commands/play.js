@@ -66,26 +66,8 @@ module.exports = {
     },
     async execute(interaction) {
         global.interaction = interaction;
+        
         const query = interaction.options.getString('query');
-        let player = await interaction.client.manager.get(interaction.guild.id) || await interaction.client.manager.create({
-            guild: interaction.guild.id,
-            voiceChannel: interaction.member.voice.channel.id,
-            textChannel: interaction.channel.id,
-            region: config.region,
-            selfDeafen: config.selfDeafen
-        });
-
-        if (!player.voiceChannel) {
-            await player.destroy()
-            player = await interaction.client.manager.create({
-                guild: interaction.guild.id,
-                voiceChannel: interaction.member.voice.channel.id,
-                textChannel: interaction.channel.id,
-                region: config.region,
-                selfDeafen: config.selfDeafen
-            });
-        }
-
         const { channel } = interaction.member.voice;
         const memberVoiceChannel = interaction.member.voice.channel;
         const permissions = memberVoiceChannel.permissionsFor(interaction.client.user); // ตรวจสอบ Permissions ในห้องเสียง
@@ -108,12 +90,6 @@ module.exports = {
                 .setDescription(`> \`❌\` กรุณาเข้าห้องเสียงด้วย`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
-        } else if (interaction.member.voice.channel.id !== player.voiceChannel) {
-            const embed = new EmbedBuilder()
-                .setColor(config.embed_fail)
-                .setDescription(`> \`❌\` คุณต้องอยู่ในห้องเดียวกับบอท`);
-
-            return interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (query.includes('deezer') || query.includes('music.apple')) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
@@ -122,9 +98,34 @@ module.exports = {
             return interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
+        let player = await interaction.client.manager.get(interaction.guild.id) || await interaction.client.manager.create({
+            guild: interaction.guild.id,
+            voiceChannel: interaction.member.voice.channel.id,
+            textChannel: interaction.channel.id,
+            region: config.region,
+            selfDeafen: config.selfDeafen
+        });
+
+        if (!player.voiceChannel) {
+            await player.destroy()
+            player = await interaction.client.manager.create({
+                guild: interaction.guild.id,
+                voiceChannel: interaction.member.voice.channel.id,
+                textChannel: interaction.channel.id,
+                region: config.region,
+                selfDeafen: config.selfDeafen
+            });
+        }
+
         const res = await player.search(query, interaction.author)
 
-        if (!res.tracks[0]) {
+        if (interaction.member.voice.channel.id !== player.voiceChannel) {
+            const embed = new EmbedBuilder()
+                .setColor(config.embed_fail)
+                .setDescription(`> \`❌\` คุณต้องอยู่ในห้องเดียวกับบอท`);
+
+            return interaction.reply({ embeds: [embed], ephemeral: true });
+        } else if (!res.tracks[0]) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_fail)
                 .setDescription(`> \`❌\` ไม่สามารถเข้าถึงเพลงได้`);

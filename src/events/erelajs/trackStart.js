@@ -8,11 +8,14 @@ module.exports = {
     name: 'trackStart',
     async execute(player, track, payload) {
 
-        let interaction = global.interaction;
-        const { channel } = interaction.member.voice;
-        const textChannel = interaction.guild.channels.cache.get(interaction.channelId)
+        const interaction = global.interaction;
+        const guild = await interaction.client.guilds.cache.get(player.guild);
+        const { channel } = await interaction.member.voice;
 
-        console.log(player)
+        if (!guild) return;
+        const textChannel = await guild.channels.cache.get(player.textChannel);
+        if (!textChannel) return;
+        
 
         console.log(`[${chalk.bold.greenBright('LAVALINK')}] ${chalk.greenBright('Play')} ${track.title} ${chalk.greenBright('in Channel:')} ${channel.name} ${chalk.greenBright('Server:')} ${interaction.guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
 
@@ -25,14 +28,14 @@ module.exports = {
                 .setThumbnail(track.thumbnail)
                 .setTimestamp();
 
-            return textChannel.send({ embeds: [embed], ephemeral: false });
+            textChannel.send({ embeds: [embed], ephemeral: false });
         } else if (track.isStream === true) {
             const embed = new EmbedBuilder()
                 .setColor(config.embed_color)
                 .setAuthor({ name: 'Go to Live', iconURL: userAvatar, url: track.uri })
                 .setDescription(`\`🔴\`┃**${track.title}**`)
                 .setThumbnail(track.thumbnail)
-            return textChannel.send({ embeds: [embed] });
+            textChannel.send({ embeds: [embed] });
         }
         player.set('firstsong', false)
     },
