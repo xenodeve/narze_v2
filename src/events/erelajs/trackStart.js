@@ -14,7 +14,7 @@ module.exports = {
 
         if (!guild) return;
         const textChannel = await guild.channels.cache.get(player.textChannel);
-        if (!textChannel) return;
+        if (!textChannel || !track) return;
         
 
         console.log(`[${chalk.bold.greenBright('LAVALINK')}] ${chalk.greenBright('Play')} ${track.title} ${chalk.greenBright('in Channel:')} ${channel.name} ${chalk.greenBright('Server:')} ${interaction.guild.name}${chalk.greenBright('(')}${player.guild}${chalk.greenBright(')')}`);
