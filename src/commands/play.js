@@ -35,6 +35,8 @@ module.exports = {
             } else {
                 let result = await player.search(query, interaction.author)
 
+                console.log('res 1 :', result)
+
                 if (result.loadType === 'error' || result.loadType === 'empty') {
                     title = `(ข้อผิดพลาด) กรุณาใส่ URL ที่ถูกต้อง`;
                     choice.push({ name: title, value: 'error' });
@@ -118,6 +120,8 @@ module.exports = {
         }
 
         const res = await player.search(query, interaction.author)
+
+        console.log('res 2 :', res)
 
         if (interaction.member.voice.channel.id !== player.voiceChannel) {
             const embed = new EmbedBuilder()

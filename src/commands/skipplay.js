@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../setting/config.json')
 const { convertTime } = require('../structures/convertTime');
 
@@ -97,7 +97,7 @@ module.exports = {
                 .setDescription(`> \`❌\`ไม่รองรับ Platform นี้`);
 
             return interaction.reply({ embeds: [embed], ephemeral: true });
-        } else if (!player || !player.playing || query === 'nobeforsong_error') {
+        } else if (!player || !player.queue.current || query === 'nobeforsong_error') {
             const embed = new EmbedBuilder()
                 .setDescription(`> \`❌\`ไม่มีเพลงก่อนหน้า`)
                 .setColor(config.embed_fail);
@@ -118,8 +118,11 @@ module.exports = {
         await interaction.deferReply({ ephemeral: false });
         const userAvatar = interaction.user.displayAvatarURL();
 
-        await player.play(res.tracks[0]);
-        // player.stop();
+        console.log('player.queue', player.queue)
+        const backup = player.queue
+        await player.queue.clear();
+        await player.queue.add(res.tracks[0]);
+        player.queue.add(backup);
 
         // สร้าง Embed และแสดงผล
         const embed = new EmbedBuilder()

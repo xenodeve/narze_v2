@@ -23,7 +23,7 @@ module.exports = {
 			`✅ Youtube Music | xeno.2004`,
 			`✅ Spotify | xeno.2004`,
 			`✅ SoundCloud | xeno.2004`,
-			`✅ TwitchTv | xeno.2004`,
+			`✅ Twitch | xeno.2004`,
 			`🤝 ${members} users used`,
 			//`/filter <menu> | ${channels} channels`,
 			// `/filter <menu>`,
